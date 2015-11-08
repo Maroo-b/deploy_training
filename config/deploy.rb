@@ -5,7 +5,7 @@ set :application, 'myapp'
 set :repo_url, 'https://github.com/Maroo-b/deploy_training.git'
 
 # Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
 set :deploy_to, '/home/mb/deploy/myapp'
@@ -35,14 +35,14 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 # set :keep_releases, 5
 set :use_sudo, false
 set :bundle_binstubs, nil
-after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
     task :restart do
-          invoke 'unicorn:stop'
-              invoke 'unicorn:reload'
-                end
+      invoke 'unicorn:stop'
+      invoke 'unicorn:reload'
+    end
 
-      task :stop do
-            invoke 'unicorn:stop'
-              end
+     task :stop do
+      invoke 'unicorn:stop'
+     end
+     after 'deploy:publishing', 'deploy:restart'
 end
